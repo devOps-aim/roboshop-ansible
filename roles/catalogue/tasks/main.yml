@@ -1,0 +1,29 @@
+- name : Set prompt
+  ansible.buitlin.shell: set-prompt {{ app_name }}-{{ dev }}
+
+
+- name: Load nodejs
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nodejs
+
+- name: Copy Mongodb file
+  ansible.builtin.copy: 
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongodb.repo
+
+- name: Install mongoDB client
+  ansible.builtin.dnf:
+    name: mongodb-mongosh
+    state: installed
+
+- name: Load master data
+  ansible.buitin.shell: mongosh --host mongodb-{{ env }}.aim4devops.online </app/db/master-data.js
+  
+- name : Restart catalogue service
+  ansible.builtin.systemd_service:
+    name: catalogue
+    state: restarted
+    enabled: yes
+
+    
