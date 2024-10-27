@@ -1,0 +1,26 @@
+- name : Set prompt
+  ansible.buitlin.shell: set-prompt {{ app_name }}-{{ dev }}
+
+
+- name: Load maven
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: maven
+
+- name: Install MYSQL client
+  ansible.builtin.dnf:
+    name: mysql
+    state: installed
+
+- name: Load SQL file
+  ansible.builtin.shell: mysql -h mysql-{{ env }}.aim4devops.online -uroot -pRoboShop@1 < /app/db/{{ item }}.sql
+  loop:
+    - schema
+    - app-user
+    - master-data
+  
+- name: Restart shipping
+  ansible.builtin.systemd_service:
+    name: shipping
+    state: restarted
+

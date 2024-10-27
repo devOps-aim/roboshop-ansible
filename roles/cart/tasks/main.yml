@@ -1,0 +1,7 @@
+- name : Set prompt
+  ansible.buitlin.shell: set-prompt {{ app_name }}-{{ dev }}
+
+- name: Load nodejs
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nodejs

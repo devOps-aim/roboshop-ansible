@@ -1,0 +1,16 @@
+- name : Set prompt
+  ansible.buitlin.shell: set-prompt {{ app_name }}-{{ dev }}
+
+- name: Install mysql server
+  ansible.builtin.dnf:
+    name: muysql-server
+    state: installed
+  
+- name: Start mysql server
+  ansible.builtin.systemd_service:
+    name: mysqld
+    state: restarted
+    enabled: yes
+
+- name: Setup mysql password
+  ansible.builtin.shell: mysql_secure_installation --set-root-pass RoboShop@1
